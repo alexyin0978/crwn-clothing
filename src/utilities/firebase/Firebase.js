@@ -1,9 +1,10 @@
 import {initializeApp} from 'firebase/app';
 import {
     getAuth,
-    signInWithRedirect,
+    // signInWithRedirect,
     signInWithPopup,
-    GoogleAuthProvider
+    GoogleAuthProvider,
+    createUserWithEmailAndPassword
 } from 'firebase/auth';
 import {
     getFirestore,
@@ -13,6 +14,7 @@ import {
 } from 'firebase/firestore'; 
 
 
+//以下是sign in with google account
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDE11zWoEpbejW7w1g_dMvx0v5PeYJJXfI",
@@ -28,19 +30,23 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 //Instantiate provider 
 //-> force user to select an accout if using google to login
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
     prompt: 'select_account',
 });
 //set signin popup
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider); 
+export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider); 
+// export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
 
 //Instantiate database
 export const db = getFirestore();
 //get unipue Id from logGoogleUser's response
-export const createUserDocumentFromAuth = async (userAuth) => {
+export const createUserDocumentFromGoogleAuth = async (
+    userAuth, 
+    additionalInfo = {}
+    ) => {
     const userDocRef = doc(db, 'users', userAuth.uid);
     const userSnapshot = await getDoc(userDocRef);
 
@@ -52,10 +58,12 @@ export const createUserDocumentFromAuth = async (userAuth) => {
         try{
             //將displayName, email, createdAt
             //以setDoc method儲存到userDocRef中
+            //additionalInfo用來承接signup-form內的displayName
             await setDoc(userDocRef,{
                 displayName,
                 email,
-                createdAt
+                createdAt,
+                ...additionalInfo
             })
         }catch(err){
             console.log('error creating user', err.message)
@@ -63,4 +71,11 @@ export const createUserDocumentFromAuth = async (userAuth) => {
     }
     //若存在則單純回傳userDocRef
     return userDocRef;
+}
+
+//以下是sign up with email and password
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+    if(!email || !password){return;}
+
+    return await createUserWithEmailAndPassword(auth, email, password);
 }
