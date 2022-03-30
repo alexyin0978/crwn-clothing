@@ -94,8 +94,8 @@ const SignUpForm = () => {
                     type: "password",
                     required: true,
                     onChange: handleChange,
-                    name: "password",
-                    value: password
+                    name: "confirmPassword",
+                    value: confirmPassword
                 }}
                 />
 

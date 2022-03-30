@@ -1,10 +1,10 @@
 import {initializeApp} from 'firebase/app';
 import {
     getAuth,
-    // signInWithRedirect,
     signInWithPopup,
     GoogleAuthProvider,
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword
 } from 'firebase/auth';
 import {
     getFirestore,
@@ -14,7 +14,6 @@ import {
 } from 'firebase/firestore'; 
 
 
-//以下是sign in with google account
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDE11zWoEpbejW7w1g_dMvx0v5PeYJJXfI",
@@ -23,12 +22,13 @@ const firebaseConfig = {
     storageBucket: "crwn-clothing-db-8cc7c.appspot.com",
     messagingSenderId: "151278556782",
     appId: "1:151278556782:web:3c8ca71040d74f3d39f87f"
-  };
+};
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
 
-//Instantiate provider 
+//以下是sign in with google account
+//Instantiate google provider 
 //-> force user to select an accout if using google to login
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
@@ -37,9 +37,9 @@ googleProvider.setCustomParameters({
 //set signin popup
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider); 
-// export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
 
+//創建user info database
 //Instantiate database
 export const db = getFirestore();
 //get unipue Id from logGoogleUser's response
@@ -73,9 +73,20 @@ export const createUserDocumentFromGoogleAuth = async (
     return userDocRef;
 }
 
+
+//非google的註冊 -> 直接由email與password註冊
 //以下是sign up with email and password
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
     if(!email || !password){return;}
 
     return await createUserWithEmailAndPassword(auth, email, password);
+}
+
+
+//由email與password的登入
+//sign in with email and password
+export const signInWithAuthUserWithEmailAndPassword = async (email, password) => {
+    if(!email || !password){return;}
+
+    return await signInWithEmailAndPassword(auth, email, password);
 }
