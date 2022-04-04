@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { 
     createAuthUserWithEmailAndPassword,
-    createUserDocumentFromGoogleAuth
+    createUserDocumentFromAuth
  } from "../../utilities/firebase/Firebase";
 
 import FormInput from "../formInput/FormInput";
-import './SignUpForm.scss';
 import Button from "../button/Button";
+import { UserContext } from "../../contexts/UserContext";
 
+import './SignUpForm.scss';
+
+
+//*default state的狀態obj
 const defaultFormFields = {
     displayName: '',
     email: '',
@@ -15,38 +19,55 @@ const defaultFormFields = {
     confirmPassword: ''
 }
 
+
 const SignUpForm = () => {
 
+
+    //*state
     const [formFields, setFormFields] = useState(defaultFormFields);
     const {displayName, email, password, confirmPassword} = formFields;
 
+
+    //*輸入
     const handleChange = (event) => {
         const {name, value} = event.target;
         setFormFields({...formFields, [name]: value})
-    }
+    };
 
+
+    //*將context導入sign-up-form
+    const {setCurrentUser} = useContext(UserContext);
+    //方便將sign-up的user資料存入context
+
+
+    //*註冊
     const handleSubmit = async (event) => {
-        //因為createAuthUserWithEmailAndPassword是async
-	    //而handleSubmit將會用到此function
-        //因此handleSubmit也是async
+        //凡是需要跟db配合的動作都會是async function
 
-        //刪除form的event預設
+        //1.刪除form的event預設
         event.preventDefault();
 
-        //check confirmPassword and password matches
+        //2.check confirmPassword and password matches
         if(password !== confirmPassword){
             alert('Passwords do not match!')
             return;
         }
 		
-		//create a user document
+		//3.create a user document
         try{
+            //1.將email跟password傳給firebase，並得到user與uid
+            //但此user資料的displayName為null，因此見步驟2
             const {user} = await createAuthUserWithEmailAndPassword(email, password);
-            //將displayName裝在{}，作為obj傳到此function內
-            await createUserDocumentFromGoogleAuth(user, {displayName})
-            //註冊成功後，將欄位清空
-            resetFormField();
             
+            //1.5.將user資料存入currentUser的context
+            setCurrentUser(user);
+
+            //2.將displayName裝在{}，作為obj傳到firebase
+            await createUserDocumentFromAuth(user, {displayName})
+
+            //3.註冊成功後，將欄位清空
+            resetFormField();
+
         }catch(err){
             if(err.code === 'auth/email-already-in-use'){
                 alert('Cannot create user, email already been used!')
@@ -56,10 +77,12 @@ const SignUpForm = () => {
         }
     }
 
-    //將欄位清空
+
+    //*將欄位清空
     const resetFormField = () => {
         setFormFields(defaultFormFields);
     }
+
 
     return(
         <div className="sign-up-component">
