@@ -67,7 +67,7 @@ const SignUpForm = () => {
             //b.將user資料存入currentUser的context
             // setCurrentUser(user);
             /*備註：
-            改為由UserContext內的onAuthStateChangeListener
+            改為由UserContext內的onAuthStateChangeLi stener
             去得到user資料
             因此在這裡useContext就不需要了 
             */
