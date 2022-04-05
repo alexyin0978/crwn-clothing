@@ -144,8 +144,12 @@ export const signUserOut = async () => (await signOut(auth));
 //如此一來就不用在不同sign-in或sign-up地方
 //都設置setCurrentUser了 
 export const onAuthStateChangedListener = (callback) => {
-    //這個callback會在每次auth狀態更改
-    //意即登入或登出時
+    //這是一個perminent open listener
+    //listen to auth change
+    //因此，這個callback會在每次auth狀態更改
+    //意即登入或登出時 
     //執行這個callback function
     onAuthStateChanged(auth, callback)
+    //而這個callback function預設會在context內收到user資料
+    //(user) => {...}
 }

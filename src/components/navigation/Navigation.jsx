@@ -9,16 +9,25 @@ import './Navigation.scss';
 
 const Navigation = () => {
 
-    //user資訊放在這裡以供在登入後右上角可以保留顯示user
+
+    //*user資訊放在這裡以供在登入後右上角可以保留顯示user
     const {currentUser, setCurrentUser} = useContext(UserContext);
 
-    //signOut功能的callback
-    const signOutHandler = async () => {
-        await signUserOut();
-        setCurrentUser(null);
-    }
 
-    return(
+    //*signOut功能的callback
+    // const signOutHandler = async () => {
+    //     await signUserOut();
+    //     setCurrentUser(null);
+    // }
+    /*備註：
+    因為setCurrentUser統一由UserContext內執行
+    在Navigation內就不需要再做這件事
+    因此在Nav內只需要onClick執行signUserOut即可
+    但currentUser仍須保存以供判要render sign-in or sign-out
+    */
+
+  
+       return(
         <Fragment>
             <div className="navigation">
                 <Link to='/' className="logo-container">
@@ -32,7 +41,7 @@ const Navigation = () => {
                     { currentUser ? 
                     (<span 
                      className="nav-link"
-                     onClick={signOutHandler}
+                     onClick={signUserOut}
                      >SIGN OUT</span>) :
                     (<Link to='auth' className="nav-link">
                         SIGN IN

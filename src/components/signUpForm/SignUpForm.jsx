@@ -6,7 +6,7 @@ import {
 
 import FormInput from "../formInput/FormInput";
 import Button from "../button/Button";
-import { UserContext } from "../../contexts/UserContext";
+// import { UserContext } from "../../contexts/UserContext";
 
 import './SignUpForm.scss';
 
@@ -36,8 +36,13 @@ const SignUpForm = () => {
 
 
     //*將context導入sign-up-form
-    const {setCurrentUser} = useContext(UserContext);
+    // const {setCurrentUser} = useContext(UserContext);
     //方便將sign-up的user資料存入context
+    /*備註：
+    改為由UserContext內的onAuthStateChangeListener
+    去得到user資料
+    因此在這裡useContext就不需要了 
+    */
 
 
     //*註冊
@@ -55,17 +60,22 @@ const SignUpForm = () => {
 		
 		//3.create a user document
         try{
-            //1.將email跟password傳給firebase，並得到user與uid
+            //a.將email跟password傳給firebase，並得到user與uid
             //但此user資料的displayName為null，因此見步驟2
             const {user} = await createAuthUserWithEmailAndPassword(email, password);
             
-            //1.5.將user資料存入currentUser的context
-            setCurrentUser(user);
+            //b.將user資料存入currentUser的context
+            // setCurrentUser(user);
+            /*備註：
+            改為由UserContext內的onAuthStateChangeListener
+            去得到user資料
+            因此在這裡useContext就不需要了 
+            */
 
-            //2.將displayName裝在{}，作為obj傳到firebase
+            //c.將displayName裝在{}，作為obj傳到firebase
             await createUserDocumentFromAuth(user, {displayName})
 
-            //3.註冊成功後，將欄位清空
+            //d .註冊成功後，將欄位清空
             resetFormField();
 
         }catch(err){

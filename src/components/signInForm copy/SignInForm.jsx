@@ -5,7 +5,7 @@ import {
     signInWithAuthUserWithEmailAndPassword
  } from "../../utilities/firebase/Firebase";
 
-import {UserContext} from '../../contexts/UserContext';
+// import {UserContext} from '../../contexts/UserContext';
 import FormInput from "../formInput/FormInput";
 import Button from "../button/Button";
 
@@ -34,9 +34,14 @@ const SignInForm = () => {
     
 
     //*置入context
-    const {setCurrentUser} = useContext(UserContext);
+    // const {setCurrentUser} = useContext(UserContext);
     //setCurrentUser可以將user資料寫入currentUser內
     //然後此context將被儲存在provider的state內
+    /*備註：
+    改為由UserContext內的onAuthStateChangeListener
+    去得到user資料
+    因此在這裡useContext就不需要了
+    */
     
 
     //*google-sign-in
@@ -53,7 +58,11 @@ const SignInForm = () => {
         await createUserDocumentFromAuth(user)
 
         //2.將google-sign-in的user資料存入context
-        setCurrentUser(user);
+        // setCurrentUser(user);
+        /*備註：
+        改為由UserContext內的onAuthStateChangeListener
+        去得到user資料
+        */
 
     }
 
@@ -70,9 +79,13 @@ const SignInForm = () => {
             const {user} = await signInWithAuthUserWithEmailAndPassword(email, password);
 
             //b.將user資料寫入context
-            setCurrentUser(user);
+            // setCurrentUser(user);
+            /*備註：
+            改為由UserContext內的onAuthStateChangeListener
+            去得到user資料
+            */
             
-            //c.將表格淨空
+            //c.將表格淨空 
             resetFormField();
         }catch(err){
             switch(err.code){
