@@ -3,7 +3,10 @@ import { Fragment, useContext } from "react";
 
 import {ReactComponent as CrwnLogo} from '../../assets/crown.svg';
 import { UserContext } from "../../contexts/UserContext";
+import { CartContext } from "../../contexts/CartContext";
 import { signUserOut } from "../../utilities/firebase/Firebase";
+import CartIcon from "../cartIcon/CartIcon";
+import CartDropdown from '../cartDropdown/CartDropdown';
 
 import './Navigation.scss';
 
@@ -26,8 +29,11 @@ const Navigation = () => {
     但currentUser仍須保存以供判要render sign-in or sign-out
     */
 
+
+    //*將cart-context-value帶入Nav
+    const {isCartOpen} = useContext(CartContext);
   
-       return(
+    return(
         <Fragment>
             <div className="navigation">
                 <Link to='/' className="logo-container">
@@ -47,8 +53,10 @@ const Navigation = () => {
                         SIGN IN
                      </Link>)
                     }
+                    <CartIcon />
                 </div>
             </div>
+            {isCartOpen && <CartDropdown />}
             <Outlet />
         </Fragment>
     )
