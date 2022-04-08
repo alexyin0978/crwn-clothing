@@ -2,15 +2,24 @@ import './CartDropdown.scss';
 
 import CartItem from '../cartItem/CartItem';
 import Button from '../button/Button';
+import {CartContext} from '../../contexts/CartContext';
 
 import {useContext} from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import {CartContext} from '../../contexts/CartContext';
 
 const CartDropdown = () => {
 
     //*將cartItems帶入
     const {cartItems} = useContext(CartContext);
+
+    //*將navigate功能帶入
+    const navigate = useNavigate();
+
+    //*onClick navigate功能
+    const goToNavigation = () => {
+        navigate('/checkout');
+    }
 
     return(
         <div className='cart-dropdown-container'>
@@ -19,7 +28,9 @@ const CartDropdown = () => {
                     <CartItem key={item.id} cartItem={item} />
                 ))}
             </div>
-            <Button>GO TO CHECKOUT</Button>
+            <Button onClick={goToNavigation}>
+                GO TO CHECKOUT
+            </Button>
         </div>
     )
 }
