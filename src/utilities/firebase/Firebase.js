@@ -17,7 +17,9 @@ import {
     getFirestore,
     doc,
     getDoc,
-    setDoc
+    setDoc,
+    collection,
+    writeBatch
 } from 'firebase/firestore'; 
 
 
@@ -104,6 +106,33 @@ export const createUserDocumentFromAuth = async (
     //若user已經存在，則回傳已經存在的user資料
     return userDocRef;
 }
+
+//*create shop-data-collection & batch into 1 transaction
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+    //collectionKey為collection的名稱
+    //objectsToAdd為預計要儲存在doc內的shop-data
+
+    //1.建立collection, 指定儲存的database與名稱
+    const collectionRef = collection(db, collectionKey);
+
+    //2.建立batch, (可以將所有objects綁進同個transaction)
+    const batch = writeBatch(db);
+
+    //3.將objectsToAdd寫進document內
+    objectsToAdd.forEach(object => {
+        
+        //a.將object資料寫入document內 - 選擇collection, doc名稱
+        const docRef = doc(collectionRef, object.title.toLowerCase());
+    
+        //b.將object-doc用batch綁定成1個trx
+        batch.set(docRef, object);
+
+    });
+    
+    //4.完成batch的建立 -> 一個doc只需要batch commit一次
+    await batch.commit();
+    console.log('done');
+};
 
 
 

@@ -1,33 +1,41 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
-import PRODUCTS from '../shop-data.json';
+import SHOP_DATA from '../shop-data.js';
+import { addCollectionAndDocuments } from "../utilities/firebase/Firebase";
 
 
-//1.actual context-value，初始值為empty array(empty json)
+//*actual context-value，初始值為empty array(empty json)
 export const ProductsContext = createContext({
 
     //a.context-value
     products: [],
     
-})
+});
 
 
-//2.provider
+//*provider
 export const ProductsProvider = ({children}) => {
 
-    //a.創建context-state，初始值為mock-data
-    const [products, setProducts] = useState(PRODUCTS);
+    //1.創建context-state，初始值為mock-data
+    const [products, setProducts] = useState([]);
 
-    //b.將context-state儲存到value內
+    //2.用useEffect將shop-data寫入db
+    //只需要寫入一次而已，因此跑完一次(log顯示'done')就可以刪除此useEffect
+    // useEffect(()=>{
+    //     addCollectionAndDocuments('categories', SHOP_DATA);
+    // }, []);
+
+    //3.將context-state儲存到value內
     //然後傳給provider
     const value = {products};
+
 
     return(
         <ProductsContext.Provider value={value}>
             {children}
         </ProductsContext.Provider>
-    )
-}
+    );
+};
 
 /*備註：
 context分為兩種
