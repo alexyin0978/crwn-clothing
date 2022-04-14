@@ -5,23 +5,23 @@ import CategoryPreview from "../../components/categoryPreview/CategoryPreview";
 
 const CategoriesPreview = () => {
 
-    //1.將categoriesMap-context-state帶入ShopPage
-    const {categoriesMap} = useContext(CategoriesContext);
+  //1.將categoriesMap-context-state帶入ShopPage
+  const {categoriesMap} = useContext(CategoriesContext);
 
-    return(
-        <Fragment>
-            {Object.keys(categoriesMap).map(title => {
-                const products = categoriesMap[title];
-                return(
-                    <CategoryPreview 
-                    key={title}
-                    title={title}
-                    products={products}
-                    />
-                )
-            })}
-        </Fragment>
-    )
+  return(
+    <Fragment>
+      {Object.keys(categoriesMap).map(title => {
+        const products = categoriesMap[title];
+        return(
+          <CategoryPreview 
+          key={title}
+          title={title}
+          products={products}
+          />
+        )
+      })}
+    </Fragment>
+  )
 }
 
 export default CategoriesPreview;

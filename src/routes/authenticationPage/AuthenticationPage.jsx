@@ -6,12 +6,12 @@ import {
 } from './AuthenticationPage.styled';
 
 const AuthenticationPage = () => {
-    return(
-        <AuthenticationContainer>
-            <SignInForm />
-            <SignUpForm />
-        </AuthenticationContainer>
-    )
+  return(
+    <AuthenticationContainer>
+      <SignInForm />
+      <SignUpForm />
+    </AuthenticationContainer>
+  )
 }
 
 export default AuthenticationPage;
