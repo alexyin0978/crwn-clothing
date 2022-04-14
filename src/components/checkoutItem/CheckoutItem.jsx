@@ -1,4 +1,13 @@
-import './CheckoutItem.scss';
+import {
+    CheckoutItemContainer,
+    ImageContainer,
+    Name,
+    Price,
+    Quantity,
+    Arrow,
+    Value,
+    RemoveButton
+} from './CheckoutItem.styled';
 
 import { useContext } from 'react';
 
@@ -30,31 +39,25 @@ const CheckoutItem = ({cartItem}) => {
     const removeItemHandler = () => removeItemFromCart(cartItem);
 
     return(
-        <div className='checkout-item-container'>
-            <div className='image-container'>
+        <CheckoutItemContainer>
+            <ImageContainer>
                 <img src={imageUrl} alt={`${name}`} />
-            </div>
-            <span className="name">{name}</span>
-            <span className="quantity">
-                <div 
-                className="arrow"
-                onClick={removeItemHandler}>
+            </ImageContainer>
+            <Name>{name}</Name>
+            <Quantity>
+                <Arrow onClick={removeItemHandler}>
                     &#10094; {/* <符號 */}
-                </div>
-                <span className="value">{quantity}</span>
-                <div 
-                className="arrow"
-                onClick={addItemHandler}>
+                </Arrow>
+                <Value>{quantity}</Value>
+                <Arrow onClick={addItemHandler}>
                     &#10095; {/* >符號 */}
-                </div>
-            </span>
-            <span className="price">{price}</span>
-            <div 
-            className="remove-button"
-            onClick={clearItemHandler}>
+                </Arrow>
+            </Quantity>
+            <Price>{price}</Price>
+            <RemoveButton onClick={clearItemHandler}>
                 &#10005; {/* X符號 */}
-            </div>
-        </div>
+            </RemoveButton>
+        </CheckoutItemContainer>
     )
 } 
 

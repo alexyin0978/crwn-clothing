@@ -19,7 +19,9 @@ import {
     getDoc,
     setDoc,
     collection,
-    writeBatch
+    writeBatch,
+    query,
+    getDocs
 } from 'firebase/firestore'; 
 
 
@@ -119,11 +121,11 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
     const batch = writeBatch(db);
 
     //3.將objectsToAdd寫進document內
-    objectsToAdd.forEach(object => {
-        
+    objectsToAdd.forEach( object => {
+
         //a.將object資料寫入document內 - 選擇collection, doc名稱
         const docRef = doc(collectionRef, object.title.toLowerCase());
-    
+
         //b.將object-doc用batch綁定成1個trx
         batch.set(docRef, object);
 
@@ -133,6 +135,39 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
     await batch.commit();
     console.log('done');
 };
+
+//*get shop-data from collection
+export const getCategoriesAndDocuments = async () => {
+
+    //1.指定已經建立的'categories' collection
+    //此為arr of shop-data
+    const collectionRef = collection(db, 'categories');
+
+    //2.使用query method將arr-data轉為obj-data
+    const q = query(collectionRef);
+
+    //3.將某個片段data取出
+    const querySnapshot = await getDocs(q);
+
+    //4.將querySnapshot資料儲存到cateGoryMap內
+    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot)=>{
+        //這裡使用reduce, 基底為{}
+
+        //a.將title與items destructure
+        const {title, items} = docSnapshot.data();
+
+        //b.???
+        acc[title.toLowerCase()] = items;
+
+        //c.將acc回傳
+        return acc;
+
+    },{});
+
+    //5.最後，回傳categoryMap
+    return categoryMap;
+
+}
 
 
 

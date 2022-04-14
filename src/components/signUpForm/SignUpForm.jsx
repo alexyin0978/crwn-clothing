@@ -8,7 +8,10 @@ import FormInput from "../formInput/FormInput";
 import Button from "../button/Button";
 // import { UserContext } from "../../contexts/UserContext";
 
-import './SignUpForm.scss';
+import {
+    SignUpComponent,
+    Header
+} from './SignUpForm.styled';
 
 
 //*default state的狀態obj
@@ -95,8 +98,8 @@ const SignUpForm = () => {
 
 
     return(
-        <div className="sign-up-component">
-            <h2>Don't have an account?</h2>
+        <SignUpComponent>
+            <Header>Don't have an account?</Header>
             <span>Sign up with your email and password</span>
             <form onSubmit={handleSubmit}>
                 <FormInput 
@@ -146,7 +149,7 @@ const SignUpForm = () => {
                     Sign Up
                 </Button>
             </form>
-        </div>
+        </SignUpComponent>
     )
 }
 

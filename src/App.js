@@ -13,7 +13,8 @@ const App = () => {
     <Routes>
       <Route path='/' element={<Navigation />} >
         <Route index element={<Homepage />} />
-        <Route path='shop' element={<ShopPage />} />
+        {/* route/*代表任何/後面的東西都會導向ShopPage.jsx */}
+        <Route path='shop/*' element={<ShopPage />} />
         <Route path='auth' element={<AuthenticationPage />} />
         <Route path='checkout' element={<CheckoutPage />} />
       </Route>

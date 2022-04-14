@@ -1,11 +1,15 @@
-import './CartDropdown.scss';
+import {
+    CartDropdownContainer,
+    EmptyObject,
+    CartItems
+} from './CartDropdown.styled';
 
 import CartItem from '../cartItem/CartItem';
 import Button from '../button/Button';
 import {CartContext} from '../../contexts/CartContext';
 
 import {useContext} from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 
 const CartDropdown = () => {
@@ -19,20 +23,26 @@ const CartDropdown = () => {
     //*onClick navigate功能
     const goToNavigation = () => {
         navigate('/checkout');
-    }
+    };
 
     return(
-        <div className='cart-dropdown-container'>
-            <div className='cart-items'>
-                {cartItems.map(item => (
-                    <CartItem key={item.id} cartItem={item} />
-                ))}
-            </div>
+        <CartDropdownContainer>
+            <CartItems>
+                {
+                    cartItems.length
+                    ? (cartItems.map(item => (
+                        <CartItem key={item.id} cartItem={item} />
+                    )))
+                    : (<EmptyObject>
+                        Your cart is empty
+                       </EmptyObject>)
+                }
+            </CartItems>
             <Button onClick={goToNavigation}>
                 GO TO CHECKOUT
             </Button>
-        </div>
-    )
-}
+        </CartDropdownContainer>
+    );
+};
 
 export default CartDropdown;

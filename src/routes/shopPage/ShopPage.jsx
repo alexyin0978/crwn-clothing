@@ -1,27 +1,18 @@
-import { useContext } from "react";
+import CategoriesPreview from "../categoriesPreview/CategoriesPreview";
+import Category from "../category/Category";
 
-import { ProductsContext } from "../../contexts/ProductsContext";
-import ProductCard from "../../components/productCard/ProductCard";
-
-import './ShopPage.scss';
+import {Routes, Route} from 'react-router-dom';
 
 const ShopPage = () => {
 
-    //1.將products-context-state帶入ShopPage
-    //在這裡products會是在provider內設定的初始值mock-data
-    const {products} = useContext(ProductsContext);
-
-
     return(
-        <div className="products-container">
-            {products.map((product) => (
-                <ProductCard 
-                key={product.id}  
-                product={product}
-                />
-            ))}
-        </div>
+        /* nested routes */
+        <Routes>
+            <Route index element={<CategoriesPreview />} />
+            {/* 在url填入/...都會被儲存在category內 */}
+            <Route path=':category' element={<Category />} />
+        </Routes>
     )
-}
+};
 
 export default ShopPage;

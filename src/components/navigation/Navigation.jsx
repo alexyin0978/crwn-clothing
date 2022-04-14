@@ -8,7 +8,12 @@ import { signUserOut } from "../../utilities/firebase/Firebase";
 import CartIcon from "../cartIcon/CartIcon";
 import CartDropdown from '../cartDropdown/CartDropdown';
 
-import './Navigation.scss';
+import {
+    NavigationContainer,
+    LogoContainer,
+    NavLinksContainer,
+    NavLink
+} from './Navigation.styled';
 
 const Navigation = () => {
 
@@ -35,27 +40,27 @@ const Navigation = () => {
   
     return(
         <Fragment>
-            <div className="navigation">
-                <Link to='/' className="logo-container">
+            <NavigationContainer>
+                <LogoContainer to='/'>
                     <CrwnLogo />
-                </Link>
-                <div className="nav-links-container">
-                    <Link to='shop' className="nav-link">
+                </LogoContainer>
+                <NavLinksContainer>
+                    <NavLink to='shop'>
                         SHOP
-                    </Link>
+                    </NavLink>
                     {/* 若user為登入狀態，則右上角顯示sign out */}
                     { currentUser ? 
-                    (<span 
-                     className="nav-link"
+                    (<NavLink
+                     as='span'
                      onClick={signUserOut}
-                     >SIGN OUT</span>) :
-                    (<Link to='auth' className="nav-link">
+                     >SIGN OUT</NavLink>) :
+                    (<NavLink to='auth'>
                         SIGN IN
-                     </Link>)
+                     </NavLink>)
                     }
                     <CartIcon />
-                </div>
-            </div>
+                </NavLinksContainer>
+            </NavigationContainer>
             {isCartOpen && <CartDropdown />}
             <Outlet />
         </Fragment>

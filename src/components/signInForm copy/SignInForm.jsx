@@ -7,9 +7,13 @@ import {
 
 // import {UserContext} from '../../contexts/UserContext';
 import FormInput from "../formInput/FormInput";
-import Button from "../button/Button";
+import Button, {BUTTON_TYPE_CLASSES} from "../button/Button";
 
-import './SignInForm.scss';
+import {
+    SignInComponent,
+    Header,
+    ButtonsContainer
+} from './SignInForm.styled';
 
 
 //*default state狀態object
@@ -109,8 +113,8 @@ const SignInForm = () => {
 
 
     return(
-        <div className="sign-in-component">
-            <h2>Already have an account?</h2>
+        <SignInComponent>
+            <Header>Already have an account?</Header>
             <span>Sign In with your email and password</span>
             <form onSubmit={handleSubmit}>
 
@@ -135,7 +139,7 @@ const SignInForm = () => {
                     value: password
                 }}
                 />
-                <div className="buttons-container">
+                <ButtonsContainer>
                     <Button 
                     type="submit">
                         Sign In
@@ -144,13 +148,13 @@ const SignInForm = () => {
                     //將google-sign-in的button type設為button
                     //避免在normal-sign-in時兩個button一起submit
                     type='button'
-                    buttonType='google' 
+                    buttonType={BUTTON_TYPE_CLASSES.google}
                     onClick={signInWithGoogle}>
                         Google Sign In
                     </Button>
-                </div>
+                </ButtonsContainer>
             </form>
-        </div>
+        </SignInComponent>
     )
 }
 
